@@ -1,6 +1,6 @@
 import { ref, onMounted} from 'vue'
 import axios from 'axios'
-import { jwtdecode} from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import router from 'vue-router'
 
 export const api = axios.create({ baseURL: import.meta.env.VITE_API})
