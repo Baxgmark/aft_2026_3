@@ -3,29 +3,28 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { useRouter } from 'vue-router'
 
-export const api = axios.create({ baseURL: import.meta.env.VITE_API})
-axios.interceptors.request.use((config)=>{
-    if (!config.url || !config.url.includes('/api/')){
-        throw new axios.CanceledError('ไม่มี url')
+export const api = axios.create({ baseURL: import.meta.env.VITE_API })
+api.interceptors.request.use((config) => {
+    if (!config.url || !config.url.includes('/api/')) {
+        throw new axios.CanceledError('ยังไม่ได้ตั้ง url')
     }
 
     const token = localStorage.getItem('authtoken')
-    if (token) {
+    if (token)
         config.headers.Authorization = `Bearer ${token}`
-        return config;
-    }
+    return config
 })
 
 api.interceptors.response.use(
     (res) => res,
-    (e) =>{
+    (e) => {
         return Promise.reject(e)
     }
 )
 
 export const me = () => {
     const token = localStorage.getItem('authtoken')
-    return token ? jwtdecode(token) : {}
+    return token ? jwtDecode(token) : {}
 }
 
 export const logout = () => {
@@ -59,55 +58,54 @@ export const userlist = (url) => {
     return items
 }
 
-export const useCrud = (url, extra = {}) =>{
-    const u = typeof urls === 'string' ? { list: urls, add: urls, edit: urls, del: urls} : urls
+export const useCrud = (url, extra = {}) => {
+    const u = typeof urls === 'string' ? { list: urls, add: urls, edit: urls, del: urls } : urls
 
-    const rows = ([])
-    const form = ({})
+    const rows = ref([])
+    const form = ref({})
 
     const load = async () => {
-        if (u.list) return
-        try{
-        rows.value = pickrows((await api.get(u.list)).data)
+        if (!u.list) return
+        try {
+            rows.value = pickrows((await api.get(u.list)).data)
         } catch (e) {
-        alert(e)
+            err(e)
         }
     }
 
     const add = async () => {
-        if (u.add) return
-        try{
-            await api.post(u.add, { ...extra, ...form.value})
-            alert('สำเร็จ')
+        if (!u.add) return warn('หน้านี้ยังไม่ได้ตั้ง url สำหรับเพิ่มข้อมูล')
+        try {
+            await api.post(u.add, { ...extra, ...form.value })
+            ok('เพิ่มข้อมูลสำเร็จ')
             form.value = {}
             load()
-        } catch(e) {
-            alert(e)
+        } catch (e) {
+            err(e)
         }
     }
-   
 
     const edit = async (row) => {
-        try{
+        try {
             await api.put(u.edit, row)
-            alert('สำเร็จ')
+            ok('แก้ไขสำเร็จ')
             load()
-        } catch(e){
-            alert(e)
+        } catch (e) {
+            err(e)
         }
     }
 
     const del = async (row) => {
-        if (!confirm('ยืนยันการลบไหม?')) return
-        try{
-            await api.delete(u.del, { params: {id: row.id}})
-            alert('สำเร็จ')
+        if (!confirm('ยืนยันการลบ?')) return
+        try {
+            await api.delete(u.del, { params: { id: row.id } })
+            ok('ลบสำเร็จ')
             load()
-        } catch(e) {
-            alert(e)
+        } catch (e) {
+            err(e)
         }
     }
 
-    if(u.list) onMounted(load)
-        return {rows, form, add, load, del, edit}
+    if (u.list) onMounted(load)
+    return { rows, form, load, add, edit, del }
 }
