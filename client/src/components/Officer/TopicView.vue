@@ -62,5 +62,15 @@
 </template>
 
 <script setup>
+import { useCrud } from '../../lib';
 
+const types = [
+    {id: '1',label: '1-4 คะแนน'},
+    {id: '2', label: 'มี / ไม่มี'}
+]
+
+const { rows, form, add, edit, del} = useCrud({
+    add:'/api/addtopic',
+    list:'/api/alltopic'
+})
 </script>
