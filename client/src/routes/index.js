@@ -22,7 +22,7 @@ const router = createRouter ({
         {path:'/register',component:RegisterView},
 
         //officer
-        {path:'/officer',component:TopicView,meta:{role:'officer'}},
+        {path:'/officer',component:TopicView,/*meta:{role:'officer'}*/},
         {path:'/officer/match',component:MatchView,meta:{role:'officer'}},
         {path:'/officer/quiz',component:MatchQuiz,meta:{role:'officer'}},
         {path:'/officer/role',component:RoleView,meta:{role:'officer'}},
