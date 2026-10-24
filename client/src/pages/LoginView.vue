@@ -6,7 +6,7 @@
 
     <script setup>
         import { ref} from 'vue'
-        import { jwtdecode } from 'jwt-decode'
+        import { jwtDecode } from 'jwt-decode';
         import { api } from '../lib';
         import { useRouter } from 'vue-router';
 
