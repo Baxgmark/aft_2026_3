@@ -59,7 +59,7 @@ export const userlist = (url) => {
 }
 
 export const useCrud = (url, extra = {}) => {
-    const u = typeof urls === 'string' ? { list: urls, add: urls, edit: urls, del: urls } : urls
+    const u = typeof url === 'string' ? { list: url, add: url, edit: url, del: urls } : url
 
     const rows = ref([])
     const form = ref({})
