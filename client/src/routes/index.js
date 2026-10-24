@@ -12,4 +12,20 @@ const router = createRouter ({
     ]
 })
 
-export default router;
+const getrole = () => {
+    const token = localStorage.getItem('authtoken')
+    if (!token) return null
+    try {
+        return jwtDecode(token).role
+    } catch {
+        localStorage.removeItem('authtoken')
+        return null
+    }
+}
+
+// กันเข้าหน้าผิด role
+router.beforeEach((to) => {
+    if (to.meta.role && to.meta.role !== getrole()) return '/login'
+})
+
+export default router
