@@ -69,7 +69,7 @@ export const useCrud = (url, extra = {}) => {
         try {
             rows.value = pickrows((await api.get(u.list)).data)
         } catch (e) {
-            alert('ไก่')
+            alert(e)
         }
     }
 
@@ -81,7 +81,7 @@ export const useCrud = (url, extra = {}) => {
             form.value = {}
             load()
         } catch (e) {
-              alert('ไก่')
+              alert(e)
         }
     }
 
@@ -91,7 +91,7 @@ export const useCrud = (url, extra = {}) => {
             ok('แก้ไขสำเร็จ')
             load()
         } catch (e) {
-              alert('ไก่')
+              alert(e)
         }
     }
 
@@ -102,7 +102,7 @@ export const useCrud = (url, extra = {}) => {
             ok('ลบสำเร็จ')
             load()
         } catch (e) {
-              alert('ไก่')
+              alert(e)
         }
     }
 
